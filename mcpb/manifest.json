@@ -1,0 +1,23 @@
+{
+  "manifest_version": "0.3",
+  "name": "mcp-tekna",
+  "version": "0.1.0",
+  "description": "MCP server for Tekna events and news",
+  "author": {
+    "name": "Vortiago",
+    "url": "https://github.com/Vortiago"
+  },
+  "repository": {
+    "url": "https://github.com/Vortiago/mcp-tekna",
+    "type": "github"
+  },
+  "server": {
+    "type": "python",
+    "entry_point": "src/mcp_tekna/server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "mcp-tekna"],
+      "env": {}
+    }
+  }
+}
