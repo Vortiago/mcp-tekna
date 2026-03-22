@@ -1,0 +1,16 @@
+services:
+  mcp-tekna:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MCP_TRANSPORT=streamable-http
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=3000
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; r = urllib.request.urlopen('http://localhost:3000/mcp'); exit(0 if r.status in (405, 406) else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
