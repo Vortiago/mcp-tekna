@@ -41,7 +41,8 @@
 - [ ] T007 Create tests/__init__.py and tests/conftest.py with shared fixtures for loading JSON files from repo root
 - [ ] T008 Create scripts/bump_version.py that reads version from setuptools-scm and updates version field in .claude-plugin/plugin.json, server.json, and mcpb/manifest.json atomically in scripts/bump_version.py
 - [ ] T009 [P] Add poe task `bump-version` to pyproject.toml pointing to scripts/bump_version.py
-- [ ] T010 [P] Configure pre-commit hooks for ruff format and ruff check in .pre-commit-config.yaml
+- [ ] T010 [P] Test that bump_version.py updates version in all manifest files consistently in tests/test_manifests.py
+- [ ] T011 [P] Configure pre-commit hooks for ruff format and ruff check in .pre-commit-config.yaml
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -57,19 +58,19 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US1] Test that .claude-plugin/plugin.json exists, is valid JSON, and contains all required fields (name, description, version, author, homepage, repository, license, keywords) in tests/test_manifests.py
-- [ ] T012 [P] [US1] Test that .claude-plugin/marketplace.json exists, is valid JSON, and contains required fields in tests/test_manifests.py
-- [ ] T013 [P] [US1] Test that .mcp.json exists, is valid JSON, and declares mcp-tekna server with uvx command in tests/test_manifests.py
-- [ ] T014 [P] [US1] Test that .mcp.dev.json exists, is valid JSON, and declares mcp-tekna server with uv run command in tests/test_manifests.py
-- [ ] T015 [P] [US1] Test version consistency: plugin.json version matches pyproject.toml version in tests/test_manifests.py
+- [ ] T012 [P] [US1] Test that .claude-plugin/plugin.json exists, is valid JSON, and contains all required fields (name, description, version, author, homepage, repository, license, keywords) in tests/test_manifests.py
+- [ ] T013 [P] [US1] Test that .claude-plugin/marketplace.json exists, is valid JSON, and contains required fields in tests/test_manifests.py
+- [ ] T014 [P] [US1] Test that .mcp.json exists, is valid JSON, and declares mcp-tekna server with uvx command in tests/test_manifests.py
+- [ ] T015 [P] [US1] Test that .mcp.dev.json exists, is valid JSON, and declares mcp-tekna server with uv run command in tests/test_manifests.py
+- [ ] T016 [P] [US1] Test version consistency: plugin.json version matches pyproject.toml version in tests/test_manifests.py
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] Create .claude-plugin/plugin.json with name, description, version, author (Vortiago), homepage, repository (github.com/Vortiago/mcp-tekna), license (MIT), and keywords (tekna, events, news, mcp) in .claude-plugin/plugin.json
-- [ ] T017 [P] [US1] Create .claude-plugin/marketplace.json with owner info and plugin metadata in .claude-plugin/marketplace.json
-- [ ] T018 [P] [US1] Create .mcp.json with production config: command=uvx, args=["mcp-tekna"] in .mcp.json
-- [ ] T019 [P] [US1] Create .mcp.dev.json with dev config: command=uv, args=["run", "mcp-tekna"] in .mcp.dev.json
-- [ ] T020 [US1] Run tests/test_manifests.py and verify all US1 tests pass
+- [ ] T017 [P] [US1] Create .claude-plugin/plugin.json with name, description, version, author (Vortiago), homepage, repository (github.com/Vortiago/mcp-tekna), license (MIT), and keywords (tekna, events, news, mcp) in .claude-plugin/plugin.json
+- [ ] T018 [P] [US1] Create .claude-plugin/marketplace.json with owner info and plugin metadata in .claude-plugin/marketplace.json
+- [ ] T019 [P] [US1] Create .mcp.json with production config: command=uvx, args=["mcp-tekna"] in .mcp.json
+- [ ] T020 [P] [US1] Create .mcp.dev.json with dev config: command=uv, args=["run", "mcp-tekna"] in .mcp.dev.json
+- [ ] T021 [US1] Run tests/test_manifests.py and verify all US1 tests pass
 
 **Checkpoint**: Plugin manifest files complete, Claude Code installation works
 
@@ -85,19 +86,19 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T021 [P] [US2] Test that server.json exists, is valid JSON, and contains required fields (name in reverse-DNS format, description, version) in tests/test_manifests.py
-- [ ] T022 [P] [US2] Test that server.json packages array declares pypi registry type with uvx runtime hint and stdio transport in tests/test_manifests.py
-- [ ] T023 [P] [US2] Test that server.json has no required environment variables in tests/test_manifests.py
-- [ ] T024 [P] [US2] Test that mcpb/manifest.json exists, is valid JSON, and contains required fields (manifest_version=0.3, name, version, description, author, server) in tests/test_manifests.py
-- [ ] T025 [P] [US2] Test version consistency: server.json and mcpb/manifest.json versions match pyproject.toml in tests/test_manifests.py
+- [ ] T022 [P] [US2] Test that server.json exists, is valid JSON, and contains required fields (name in reverse-DNS format, description, version) in tests/test_manifests.py
+- [ ] T023 [P] [US2] Test that server.json packages array declares pypi registry type with uvx runtime hint and stdio transport in tests/test_manifests.py
+- [ ] T024 [P] [US2] Test that server.json has no required environment variables in tests/test_manifests.py
+- [ ] T025 [P] [US2] Test that mcpb/manifest.json exists, is valid JSON, and contains required fields (manifest_version=0.3, name, version, description, author, server) in tests/test_manifests.py
+- [ ] T026 [P] [US2] Test version consistency: server.json and mcpb/manifest.json versions match pyproject.toml in tests/test_manifests.py
 
 ### Implementation for User Story 2
 
-- [ ] T026 [P] [US2] Create server.json with $schema, name (io.github.Vortiago/mcp-tekna), title, version, description, repository, and packages array with pypi/uvx/stdio config in server.json
-- [ ] T027 [P] [US2] Create mcpb/manifest.json with manifest_version=0.3, name, version, description, author, server type=python with uv runtime, entry_point, and mcp_config in mcpb/manifest.json
-- [ ] T028 [P] [US2] Create mcpb/.mcpbignore excluding .git, __pycache__, .pytest_cache, .ruff_cache, tests/, specs/, .specify/, .claude/ in mcpb/.mcpbignore
-- [ ] T029 [US2] Run tests/test_manifests.py and verify all US2 tests pass
-- [ ] T030 [US2] Run `npx @anthropic-ai/mcpb validate` in mcpb/ directory and verify manifest validates
+- [ ] T027 [P] [US2] Create server.json with $schema, name (io.github.Vortiago/mcp-tekna), title, version, description, repository, and packages array with pypi/uvx/stdio config in server.json
+- [ ] T028 [P] [US2] Create mcpb/manifest.json with manifest_version=0.3, name, version, description, author, server type=python with uv runtime, entry_point, and mcp_config in mcpb/manifest.json
+- [ ] T029 [P] [US2] Create mcpb/.mcpbignore excluding .git, __pycache__, .pytest_cache, .ruff_cache, tests/, specs/, .specify/, .claude/ in mcpb/.mcpbignore
+- [ ] T030 [US2] Run tests/test_manifests.py and verify all US2 tests pass
+- [ ] T031 [US2] Run `npx @anthropic-ai/mcpb validate` in mcpb/ directory and verify manifest validates
 
 **Checkpoint**: Claude Desktop distribution files complete, .mcpb validates
 
@@ -113,16 +114,17 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T031 [P] [US3] Test that Dockerfile exists and contains required stages (build, final) in tests/test_manifests.py
-- [ ] T032 [P] [US3] Test that glama.json exists, is valid JSON, and contains $schema and maintainers in tests/test_manifests.py
+- [ ] T032 [P] [US3] Test that Dockerfile exists and contains required stages (build, final) in tests/test_manifests.py
+- [ ] T033 [P] [US3] Test that glama.json exists, is valid JSON, and contains $schema and maintainers in tests/test_manifests.py
+- [ ] T034 [P] [US3] Test that server starts with MCP_TRANSPORT=streamable-http and responds on configured port in tests/test_server.py
 
 ### Implementation for User Story 3
 
-- [ ] T033 [P] [US3] Create glama.json with $schema (glama.ai schema URL) and maintainers=["Vortiago"] in glama.json
-- [ ] T034 [US3] Create Dockerfile with multi-stage build: base ghcr.io/astral-sh/uv:python3.12-bookworm-slim, final python:3.12-slim-bookworm, non-root user (uid 1000), default MCP_TRANSPORT=streamable-http, MCP_PORT=3000, health check in Dockerfile
-- [ ] T035 [US3] Create docker-compose.yml with mcp-tekna service, port 3000 mapping, health check, and restart policy in docker-compose.yml
-- [ ] T036 [US3] Build Docker image and verify container starts and responds to health check on port 3000
-- [ ] T037 [US3] Run tests/test_manifests.py and verify all US3 tests pass
+- [ ] T035 [P] [US3] Create glama.json with $schema (glama.ai schema URL) and maintainers=["Vortiago"] in glama.json
+- [ ] T036 [US3] Create Dockerfile with multi-stage build: base ghcr.io/astral-sh/uv:python3.12-bookworm-slim, final python:3.12-slim-bookworm, non-root user (uid 1000), default MCP_TRANSPORT=streamable-http, MCP_PORT=3000, health check in Dockerfile
+- [ ] T037 [US3] Create docker-compose.yml with mcp-tekna service, port 3000 mapping, health check, and restart policy in docker-compose.yml
+- [ ] T038 [US3] Build Docker image and verify container starts and responds to health check on port 3000
+- [ ] T039 [US3] Run tests/test_manifests.py and verify all US3 tests pass
 
 **Checkpoint**: All distribution channels functional
 
@@ -132,10 +134,10 @@
 
 **Purpose**: Documentation, version sync verification, and final validation
 
-- [ ] T038 [P] Add installation instructions to README.md covering all channels: Claude Code plugin, Claude Desktop (manual + .mcpb), PyPI (uvx/pip), and Docker
-- [ ] T039 [P] Run full test suite: `uv run pytest tests/ -v` and verify all tests pass
-- [ ] T040 Run version bump script and verify all manifests update atomically: `uv run poe bump-version`
-- [ ] T041 Run quickstart.md validation: verify each documented command works
+- [ ] T040 [P] Add installation instructions to README.md covering all channels: Claude Code plugin, Claude Desktop (manual + .mcpb), PyPI (uvx/pip), and Docker
+- [ ] T041 [P] Run full test suite: `uv run pytest tests/ -v` and verify all tests pass
+- [ ] T042 Run version bump script and verify all manifests update atomically: `uv run poe bump-version`
+- [ ] T043 Verify each install command from README.md works: uvx mcp-tekna starts server, docker build succeeds, .mcp.json config is valid, mcpb validate passes
 
 ---
 
@@ -166,14 +168,14 @@
 ### Parallel Opportunities
 
 - T002, T003, T005 can run in parallel (Setup phase)
-- T009, T010 can run in parallel (Foundational phase)
-- T011-T015 can all run in parallel (US1 tests)
-- T016-T019 can all run in parallel (US1 implementation)
-- T021-T025 can all run in parallel (US2 tests)
-- T026-T028 can all run in parallel (US2 implementation)
-- T031-T032 can run in parallel (US3 tests)
-- T033 can run in parallel with T034 (US3 implementation)
-- T038, T039 can run in parallel (Polish phase)
+- T009, T010, T011 can run in parallel (Foundational phase)
+- T012-T016 can all run in parallel (US1 tests)
+- T017-T020 can all run in parallel (US1 implementation)
+- T022-T026 can all run in parallel (US2 tests)
+- T027-T029 can all run in parallel (US2 implementation)
+- T032-T034 can run in parallel (US3 tests)
+- T035 can run in parallel with T036 (US3 implementation)
+- T040, T041 can run in parallel (Polish phase)
 
 ---
 
@@ -182,8 +184,8 @@
 ### MVP First (User Story 1 Only)
 
 1. Complete Phase 1: Setup (T001-T006)
-2. Complete Phase 2: Foundational (T007-T010)
-3. Complete Phase 3: User Story 1 (T011-T020)
+2. Complete Phase 2: Foundational (T007-T011)
+3. Complete Phase 3: User Story 1 (T012-T021)
 4. **STOP and VALIDATE**: Install plugin in Claude Code, verify tools work
 5. Deploy/demo if ready
 
