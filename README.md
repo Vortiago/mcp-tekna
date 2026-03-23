@@ -1,5 +1,7 @@
 # mcp-tekna
 
+<!-- mcp-name: io.github.Vortiago/mcp-tekna -->
+
 MCP server for Tekna events and news.
 
 ## Installation
