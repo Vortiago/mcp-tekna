@@ -22,15 +22,14 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Create Release
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Build release notes
+        id: notes
         run: |
-          gh release create ${{ github.ref_name }} \
-            --title "Release ${{ github.ref_name }}" \
-            --generate-notes \
-            --notes-start-tag $(git describe --tags --abbrev=0 ${{ github.ref_name }}^ 2>/dev/null || echo "") \
-            --notes "## Installation
+          TAG_BODY=$(git tag -l --format='%(contents:body)' ${{ github.ref_name }})
+          cat > /tmp/release-notes.md <<EOF
+          ${TAG_BODY}
+
+          ## Installation
 
           **PyPI Package:**
           \`\`\`bash
@@ -41,6 +40,15 @@ jobs:
           \`\`\`bash
           docker pull ghcr.io/${{ github.repository }}:${{ steps.version.outputs.VERSION }}
           \`\`\`
+          EOF
+          # Strip leading whitespace from YAML indentation
+          sed -i 's/^          //' /tmp/release-notes.md
 
-          ---
-          "
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ github.ref_name }} \
+            --title "Release ${{ github.ref_name }}" \
+            --generate-notes \
+            --notes-file /tmp/release-notes.md
