@@ -16,7 +16,7 @@ Search Tekna's event catalog with optional filters.
     },
     "region": {
       "type": "string",
-      "enum": ["Digital", "Nord-Norge", "Sorlandet", "Trondelag", "Vestlandet", "Ostlandet"],
+      "enum": ["Digital", "Nord-Norge", "Sørlandet", "Trøndelag", "Vestlandet", "Østlandet"],
       "description": "Filter by geographic region"
     },
     "field_of_study": {
@@ -37,6 +37,11 @@ Search Tekna's event catalog with optional filters.
       "type": "string",
       "enum": ["open", "student", "member", "tekna_ung", "tillitsvalgt"],
       "description": "Filter by target audience"
+    },
+    "event_format": {
+      "type": "string",
+      "enum": ["in-person", "digital"],
+      "description": "Filter by event format"
     },
     "page": {
       "type": "integer",

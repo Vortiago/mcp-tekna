@@ -1,0 +1,172 @@
+{
+  "Courses": {
+    "Paging": {
+      "PageNumber": 1,
+      "NumPages": 51,
+      "TotalNumItems": 501
+    },
+    "Items": [
+      {
+        "Title": "Introduksjon til kunstig intelligens",
+        "SubTitle": "",
+        "Ingress": "Lær grunnleggende om AI og maskinlæring.",
+        "Description": "<p>Full description of AI course.</p>",
+        "EventNumber": "51691",
+        "PublicUrl": "/kurs/51691",
+        "StartDate": "2026-04-15T09:00:00",
+        "EndDate": "2026-04-15T16:00:00",
+        "EnrollmentDeadline": "2026-04-10T23:59:00",
+        "Region": "Digitalt",
+        "District": "",
+        "County": "",
+        "VenueName": "Teams",
+        "VenueTown": "",
+        "EventFormat": 2,
+        "EventType": 1,
+        "Language": 1,
+        "IsActive": true,
+        "IsEnrollable": true,
+        "IsFreeOfCharge": false,
+        "InSession": false,
+        "IsHistoric": false,
+        "RegistrationState": 0,
+        "EventState": 0,
+        "TotalEnrolled": 45,
+        "TotalEnrolledParticipants": 45,
+        "MaxParticipantsForEvent": 100,
+        "TotalInWaiting": 0,
+        "IsWaitingListEnabled": true,
+        "PriceGroup": "1000",
+        "Prices": [
+          {
+            "Id": 1,
+            "Amount": 500.0,
+            "HasMva": false,
+            "Name": "Medlem",
+            "SortOrder": 1,
+            "CoursePriceType": 1,
+            "IsOnline": false,
+            "IsAvailable": true
+          },
+          {
+            "Id": 2,
+            "Amount": 1500.0,
+            "HasMva": false,
+            "Name": "Ikke-medlem",
+            "SortOrder": 2,
+            "CoursePriceType": 2,
+            "IsOnline": false,
+            "IsAvailable": true
+          }
+        ],
+        "CourseAgendas": [
+          {
+            "Id": 1,
+            "Name": "Velkommen og introduksjon",
+            "Description": "Åpning av kurset",
+            "CourseAgendaTypeId": 1,
+            "CourseAgendaType": "Session",
+            "VenueDetail": ""
+          }
+        ],
+        "CourseLecturers": [
+          {
+            "Id": 1,
+            "ProfileImage": "",
+            "FirstName": "Ola",
+            "MiddleName": "",
+            "LastName": "Nordmann",
+            "JobTitle": "Professor",
+            "Workplace": "NTNU",
+            "Email": "",
+            "Phone": "",
+            "Description": "",
+            "Content": ""
+          }
+        ],
+        "Organizer": { "Name": "Tekna", "ShortName": "Tekna" },
+        "SubOrganizer": null,
+        "PrimaryFieldOfStudy": {
+          "AlphanumericId": "ai",
+          "Id": "guid-ai",
+          "Name": "Kunstig intelligens",
+          "ParentFieldsOfStudy": [],
+          "ResultItemType": 0
+        },
+        "FieldsOfStudy": ["guid-ai"],
+        "SearchTargetGroup": 0,
+        "SearchRating": 95.5,
+        "Id": "guid-event-1"
+      },
+      {
+        "Title": "Ledelse i praksis",
+        "SubTitle": "For nye ledere",
+        "Ingress": "Praktisk kurs for ferske ledere.",
+        "Description": "<p>Full description of leadership course.</p>",
+        "EventNumber": "51700",
+        "PublicUrl": "/kurs/51700",
+        "StartDate": "2026-05-01T09:00:00",
+        "EndDate": "2026-05-02T16:00:00",
+        "EnrollmentDeadline": "2026-04-25T23:59:00",
+        "Region": "Vestlandet",
+        "District": "Bergen",
+        "County": "Vestland",
+        "VenueName": "Scandic Bergen City",
+        "VenueTown": "Bergen",
+        "EventFormat": 1,
+        "EventType": 1,
+        "Language": 1,
+        "IsActive": true,
+        "IsEnrollable": true,
+        "IsFreeOfCharge": false,
+        "InSession": false,
+        "IsHistoric": false,
+        "RegistrationState": 0,
+        "EventState": 0,
+        "TotalEnrolled": 20,
+        "TotalEnrolledParticipants": 20,
+        "MaxParticipantsForEvent": 30,
+        "TotalInWaiting": 0,
+        "IsWaitingListEnabled": false,
+        "PriceGroup": ">1000",
+        "Prices": [
+          {
+            "Id": 3,
+            "Amount": 3500.0,
+            "HasMva": true,
+            "Name": "Medlem",
+            "SortOrder": 1,
+            "CoursePriceType": 1,
+            "IsOnline": false,
+            "IsAvailable": true
+          }
+        ],
+        "CourseAgendas": [],
+        "CourseLecturers": [],
+        "Organizer": { "Name": "Tekna Vestland", "ShortName": "TV" },
+        "SubOrganizer": null,
+        "PrimaryFieldOfStudy": {
+          "AlphanumericId": "led",
+          "Id": "guid-led",
+          "Name": "Ledelse",
+          "ParentFieldsOfStudy": [],
+          "ResultItemType": 0
+        },
+        "FieldsOfStudy": ["guid-led"],
+        "SearchTargetGroup": 2,
+        "SearchRating": 80.0,
+        "Id": "guid-event-2"
+      }
+    ],
+    "Refiners": [
+      {
+        "Id": "RegionDigital",
+        "Label": "RegionDigital",
+        "Items": [
+          { "Id": "Digital", "Label": "Digital", "Count": 157 },
+          { "Id": "Vestlandet", "Label": "Vestlandet", "Count": 51 }
+        ]
+      }
+    ]
+  }
+}

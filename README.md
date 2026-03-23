@@ -54,6 +54,40 @@ Or with docker compose:
 docker compose up
 ```
 
+## Tools
+
+### search_events
+
+Search Tekna's event catalog with optional filters for region, topic, format, price, language, and audience.
+
+```
+search_events(query="AI", region="Vestlandet")
+```
+
+### get_event_details
+
+Get full details for a specific event including speakers, agenda, and pricing.
+
+```
+get_event_details(event_number="51691")
+```
+
+### get_news
+
+Fetch recent news articles with optional content type filtering.
+
+```
+get_news(content_type="Politisk", page=1)
+```
+
+### get_member_benefits
+
+List all Tekna member benefits organized by category.
+
+```
+get_member_benefits()
+```
+
 ## Development
 
 ```bash
@@ -74,6 +108,9 @@ MCP_TRANSPORT=streamable-http uv run mcp-tekna
 | `MCP_TRANSPORT` | `stdio` | Transport protocol (`stdio` or `streamable-http`) |
 | `MCP_HOST` | `0.0.0.0` | Host for streamable-http |
 | `MCP_PORT` | `3000` | Port for streamable-http |
+| `TEKNA_TIMEOUT` | `30` | Tekna API timeout in seconds |
+| `TEKNA_CACHE_TTL` | `900` | Cache TTL in seconds (15 min) |
+| `LOG_LEVEL` | `INFO` | Logging level |
 
 ### Running Tests
 

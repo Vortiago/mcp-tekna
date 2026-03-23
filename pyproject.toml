@@ -19,6 +19,8 @@ dependencies = [
     "mcp[cli]",
     "httpx",
     "python-dotenv",
+    "cachetools",
+    "beautifulsoup4",
 ]
 
 [project.scripts]
@@ -61,6 +63,7 @@ dev = [
     "pytest",
     "pytest-asyncio",
     "pytest-cov",
+    "pytest-httpx",
     "ruff",
     "pyright",
     "pre-commit",

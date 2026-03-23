@@ -1,0 +1,42 @@
+{
+  "Page": 1,
+  "PageSize": 10,
+  "Items": [
+    {
+      "Url": "/aktuelt/tekna-stotter-digitabel/",
+      "Title": "Tekna støtter verktøy for programmering i skolen",
+      "IntroText": "Programmering er en del av læreplanen, og Tekna bidrar med støtte til DigiTabel.",
+      "ListImageUrl": "/contentassets/image1.jpg",
+      "ImageAltText": null,
+      "VideoThumbnail": "",
+      "HasVideo": false,
+      "HasPodcast": null,
+      "HasStreaming": false,
+      "Lock": 0,
+      "Type": "Aktuelt",
+      "StartPublish": "20. mars 2026",
+      "StartPublishDateTime": "2026-03-20T14:15:44+01:00",
+      "Tags": [],
+      "TagsLinks": []
+    },
+    {
+      "Url": "/aktuelt/lonnsoppgjoret-2026/",
+      "Title": "Lønnsoppgjøret 2026: Dette bør du vite",
+      "IntroText": "Her er det viktigste du trenger å vite om årets lønnsoppgjør.",
+      "ListImageUrl": "/contentassets/image2.jpg",
+      "ImageAltText": "Illustrasjon",
+      "VideoThumbnail": "",
+      "HasVideo": false,
+      "HasPodcast": false,
+      "HasStreaming": false,
+      "Lock": 0,
+      "Type": "Politisk",
+      "StartPublish": "18. mars 2026",
+      "StartPublishDateTime": "2026-03-18T10:00:00+01:00",
+      "Tags": [],
+      "TagsLinks": []
+    }
+  ],
+  "HasMore": true,
+  "LoadMore": "Last mer"
+}

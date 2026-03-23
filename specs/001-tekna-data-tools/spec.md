@@ -71,7 +71,7 @@ A user asks their AI agent "What member benefits does Tekna offer?" The agent us
 ### Functional Requirements
 
 - **FR-001**: System MUST expose MCP tools for searching Tekna events with optional free-text keyword search and optional filters for region, field of study, event format, price range, and target audience.
-- **FR-002**: System MUST expose an MCP tool for retrieving detailed information about a specific event by event number or URL.
+- **FR-002**: System MUST expose an MCP tool for retrieving detailed information about a specific event by event number.
 - **FR-003**: System MUST expose an MCP tool for fetching recent news articles from Tekna with optional content type filtering and pagination.
 - **FR-004**: System MUST expose an MCP tool for listing all Tekna member benefits with names, descriptions, and URLs.
 - **FR-005**: Every response MUST include the full tekna.no URL for each item so users can open it directly in a browser.
