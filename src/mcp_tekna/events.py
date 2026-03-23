@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import httpx
+from mcp.types import ToolAnnotations
 
 from mcp_tekna.cache import cached
 from mcp_tekna.models import format_event_details, format_event_summary
@@ -18,7 +19,7 @@ from mcp_tekna.tekna_client import (
 logger = logging.getLogger(__name__)
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 async def search_events(
     query: str | None = None,
     region: str | None = None,
@@ -95,7 +96,7 @@ async def search_events(
     return "\n".join(lines)
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 async def get_event_details(event_number: str) -> str:
     """Get full details for a specific Tekna event.
 

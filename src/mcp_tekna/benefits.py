@@ -4,6 +4,7 @@ import logging
 
 import httpx
 from bs4 import BeautifulSoup
+from mcp.types import ToolAnnotations
 
 from mcp_tekna.cache import cached
 from mcp_tekna.models import format_member_benefit
@@ -13,7 +14,7 @@ from mcp_tekna.tekna_client import fetch_benefits_html
 logger = logging.getLogger(__name__)
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 async def get_member_benefits() -> str:
     """List all Tekna member benefits with descriptions and URLs.
 

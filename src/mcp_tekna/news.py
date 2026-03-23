@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import httpx
+from mcp.types import ToolAnnotations
 
 from mcp_tekna.cache import cached
 from mcp_tekna.models import format_news_article
@@ -13,7 +14,7 @@ from mcp_tekna.tekna_client import fetch_news
 logger = logging.getLogger(__name__)
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True))
 async def get_news(
     content_type: str | None = None,
     page: int = 1,
