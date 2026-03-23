@@ -1,0 +1,134 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Set image name to lowercase
+        id: image
+        run: echo "name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ steps.image.outputs.name }}
+          tags: |
+            # Tag with version on release tags (v1.0.0 -> 1.0.0)
+            type=semver,pattern={{version}}
+            # Tag with major.minor on release tags (v1.0.0 -> 1.0)
+            type=semver,pattern={{major}}.{{minor}}
+            # Tag with major on release tags (v1.0.0 -> 1)
+            type=semver,pattern={{major}}
+            # Tag with 'latest' on main branch
+            type=raw,value=latest,enable={{is_default_branch}}
+            # Tag with branch name
+            type=ref,event=branch
+            # Tag with PR number for PRs
+            type=ref,event=pr
+            # Tag with commit SHA (short form)
+            type=sha,format=short
+
+      - name: Build Docker image (amd64 for testing)
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+        with:
+          context: .
+          push: false
+          platforms: linux/amd64
+          tags: ${{ env.REGISTRY }}/${{ steps.image.outputs.name }}:test
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Test Docker image
+        run: |
+          # Start container in background
+          docker run -d --name test-container \
+            -p 3000:3000 \
+            ${{ env.REGISTRY }}/${{ steps.image.outputs.name }}:test
+
+          # Wait for container to be healthy (max 30 seconds)
+          echo "Waiting for container to be healthy..."
+          for i in {1..30}; do
+            if curl -sf -o /dev/null -w '%{http_code}' http://localhost:3000/mcp 2>/dev/null | grep -qE '(405|406)'; then
+              echo "Container is healthy"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Container failed to become healthy"
+              docker logs test-container
+              exit 1
+            fi
+            sleep 1
+          done
+
+          # Cleanup
+          docker stop test-container
+          docker rm test-container
+
+      - name: Build Docker image (multi-arch validation)
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+        with:
+          context: .
+          push: false
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Push Docker image to registry
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Image published
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "Docker image published to ${{ env.REGISTRY }}/${{ steps.image.outputs.name }}"
+          echo "Tags: ${{ steps.meta.outputs.tags }}"
+          echo ""
+          echo "To use this image:"
+          echo "  docker pull ${{ env.REGISTRY }}/${{ steps.image.outputs.name }}:${{ steps.meta.outputs.version }}"

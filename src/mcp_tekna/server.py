@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Literal
 
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
@@ -32,5 +33,8 @@ def main() -> None:
     import mcp_tekna.events  # noqa: F401
     import mcp_tekna.news  # noqa: F401
 
-    transport = os.getenv("MCP_TRANSPORT", "stdio")
+    transport: Literal["stdio", "sse", "streamable-http"] = "stdio"
+    env_transport = os.getenv("MCP_TRANSPORT")
+    if env_transport in ("stdio", "sse", "streamable-http"):
+        transport = env_transport  # type: ignore[assignment]
     mcp.run(transport=transport)

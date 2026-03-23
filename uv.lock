@@ -547,7 +547,7 @@ cli = [
 
 [[package]]
 name = "mcp-tekna"
-version = "0.1.1.dev12+gf47bf7912.d20260323"
+version = "0.1.1.dev13"
 source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
