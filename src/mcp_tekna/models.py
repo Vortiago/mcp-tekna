@@ -16,7 +16,7 @@ def format_event_summary(event: dict[str, Any]) -> str:
     region = event.get("Region", "Unknown")
     venue = event.get("VenueName", "")
     town = event.get("VenueTown", "")
-    fmt = FORMAT_MAP.get(event.get("EventFormat"), "Unknown")
+    fmt = FORMAT_MAP.get(event.get("EventFormat", 0), "Unknown")
     url = make_absolute_url(event.get("PublicUrl", ""))
 
     location = ", ".join(filter(None, [venue, town])) or region
@@ -60,7 +60,7 @@ def format_event_details(event: dict[str, Any]) -> str:
     if organizer and organizer.get("Name"):
         parts.append(f"**Organizer**: {organizer['Name']}")
 
-    lang = LANG_MAP.get(event.get("Language"), "")
+    lang = LANG_MAP.get(event.get("Language", 0), "")
     if lang:
         parts.append(f"**Language**: {lang}")
 
