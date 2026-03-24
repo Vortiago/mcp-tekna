@@ -178,12 +178,11 @@ class TestGetEventDetails:
         ):
             result = await search_events()
 
-        # First event: Organizer "Tekna", SearchTargetGroup 0 -> "Åpen for alle"
+        # First event: Organizer "Tekna", price name "Medlem" used as audience
         assert "Arrangør: Tekna" in result
-        assert "Målgruppe: Åpen for alle" in result
-        # Second event: Tekna Vestland, group 2 -> "Kun medlemmer"
+        assert "Målgruppe: Medlem" in result
+        # Second event: Tekna Vestland, price name "Medlem"
         assert "Arrangør: Tekna Vestland" in result
-        assert "Målgruppe: Kun medlemmer" in result
 
     async def test_details_include_audience_and_sub_organizer(self) -> None:
         """Details output includes Målgruppe and Sub-Organizer when present."""
@@ -205,7 +204,7 @@ class TestGetEventDetails:
         ):
             result = await get_event_details(event_number="51700")
 
-        assert "**Målgruppe**: Kun medlemmer" in result
+        assert "**Målgruppe**: Medlem" in result
         assert "**Sub-Organizer**: Tekna Bergen" in result
 
     async def test_details_omit_sub_organizer_when_null(self) -> None:
@@ -229,6 +228,41 @@ class TestGetEventDetails:
             result = await get_event_details(event_number="51691")
 
         assert "Sub-Organizer" not in result
+
+    async def test_audience_from_price_name(self) -> None:
+        """Audience uses first price tier name, ignoring SearchTargetGroup."""
+        from mcp_tekna.models import format_event_details, format_event_summary
+
+        event = {
+            "Title": "Biobasert webinar",
+            "SearchTargetGroup": 2,
+            "Prices": [
+                {
+                    "Name": "Gratis - åpent for alle",
+                    "Amount": 0,
+                    "IsAvailable": True,
+                }
+            ],
+        }
+        summary = format_event_summary(event)
+        assert "Målgruppe: Gratis - åpent for alle" in summary
+        assert "Kun medlemmer" not in summary
+
+        details = format_event_details(event)
+        assert "**Målgruppe**: Gratis - åpent for alle" in details
+        assert "Kun medlemmer" not in details
+
+    async def test_audience_falls_back_to_search_target_group(self) -> None:
+        """Falls back to AUDIENCE_MAP when no prices exist."""
+        from mcp_tekna.models import format_event_summary
+
+        event = {
+            "Title": "Test event",
+            "SearchTargetGroup": 2,
+            "Prices": [],
+        }
+        result = format_event_summary(event)
+        assert "Målgruppe: Kun medlemmer" in result
 
     async def test_audience_omitted_when_unknown(self) -> None:
         """Audience label is omitted when SearchTargetGroup is not in map."""

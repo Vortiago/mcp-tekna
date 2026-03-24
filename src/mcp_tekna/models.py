@@ -15,6 +15,24 @@ AUDIENCE_MAP = {
 }
 
 
+def _resolve_audience(event: dict[str, Any]) -> str | None:
+    """Resolve audience label from price tier names, falling back to SearchTargetGroup.
+
+    Price tier names (e.g. "Gratis - åpent for alle", "Gratis og kun for
+    Tekna-medlemmer") are the ground truth shown on the website.  The numeric
+    SearchTargetGroup field sometimes contradicts them, so we prefer the first
+    price name when available.
+    """
+    prices = event.get("Prices", [])
+    if prices:
+        return prices[0].get("Name")
+
+    target_group = event.get("SearchTargetGroup")
+    if target_group is not None:
+        return AUDIENCE_MAP.get(target_group)
+    return None
+
+
 def format_event_summary(event: dict[str, Any]) -> str:
     """Format an event dict into a concise human-readable text block."""
     title = event.get("Title", "Unknown")
@@ -41,10 +59,7 @@ def format_event_summary(event: dict[str, Any]) -> str:
     organizer = event.get("Organizer", {})
     organizer_name = organizer.get("Name", "") if organizer else ""
 
-    target_group = event.get("SearchTargetGroup")
-    audience_label = (
-        AUDIENCE_MAP.get(target_group) if target_group is not None else None
-    )
+    audience_label = _resolve_audience(event)
 
     lines = [
         f"[{title}]({url})",
@@ -83,10 +98,7 @@ def format_event_details(event: dict[str, Any]) -> str:
     if sub_organizer and sub_organizer.get("Name"):
         parts.append(f"**Sub-Organizer**: {sub_organizer['Name']}")
 
-    target_group = event.get("SearchTargetGroup")
-    audience_label = (
-        AUDIENCE_MAP.get(target_group) if target_group is not None else None
-    )
+    audience_label = _resolve_audience(event)
     if audience_label:
         parts.append(f"**Målgruppe**: {audience_label}")
 
