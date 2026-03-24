@@ -144,7 +144,7 @@
         "CourseAgendas": [],
         "CourseLecturers": [],
         "Organizer": { "Name": "Tekna Vestland", "ShortName": "TV" },
-        "SubOrganizer": null,
+        "SubOrganizer": { "Name": "Tekna Bergen", "ShortName": "TB" },
         "PrimaryFieldOfStudy": {
           "AlphanumericId": "led",
           "Id": "guid-led",

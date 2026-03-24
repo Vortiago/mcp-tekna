@@ -6,6 +6,13 @@ from mcp_tekna.tekna_client import make_absolute_url
 
 FORMAT_MAP = {1: "In-person", 2: "Digital"}
 LANG_MAP = {1: "Norsk", 2: "Engelsk"}
+AUDIENCE_MAP = {
+    0: "Åpen for alle",
+    1: "Kun studenter",
+    2: "Kun medlemmer",
+    3: "Tekna Ung",
+    4: "Tillitsvalgte",
+}
 
 
 def format_event_summary(event: dict[str, Any]) -> str:
@@ -31,6 +38,11 @@ def format_event_summary(event: dict[str, Any]) -> str:
     if end and end[:10] != start[:10]:
         date_str += f" to {end[:10]}"
 
+    organizer = event.get("Organizer", {})
+    organizer_name = organizer.get("Name", "") if organizer else ""
+
+    audience_label = AUDIENCE_MAP.get(event.get("SearchTargetGroup"))
+
     lines = [
         f"[{title}]({url})",
         f"  Dato: {date_str}",
@@ -38,6 +50,10 @@ def format_event_summary(event: dict[str, Any]) -> str:
         f"  Format: {fmt} | Region: {region}",
         f"  Påmelding: {enrollable} ({capacity} påmeldt)",
     ]
+    if organizer_name:
+        lines.append(f"  Arrangør: {organizer_name}")
+    if audience_label:
+        lines.append(f"  Målgruppe: {audience_label}")
     return "\n".join(lines)
 
 
@@ -59,6 +75,14 @@ def format_event_details(event: dict[str, Any]) -> str:
     organizer = event.get("Organizer", {})
     if organizer and organizer.get("Name"):
         parts.append(f"**Organizer**: {organizer['Name']}")
+
+    sub_organizer = event.get("SubOrganizer")
+    if sub_organizer and sub_organizer.get("Name"):
+        parts.append(f"**Sub-Organizer**: {sub_organizer['Name']}")
+
+    audience_label = AUDIENCE_MAP.get(event.get("SearchTargetGroup"))
+    if audience_label:
+        parts.append(f"**Målgruppe**: {audience_label}")
 
     lang = LANG_MAP.get(event.get("Language", 0), "")
     if lang:
