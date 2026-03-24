@@ -16,18 +16,16 @@ AUDIENCE_MAP = {
 
 
 def _resolve_audience(event: dict[str, Any]) -> str | None:
-    """Resolve audience label, using price tier names to override SearchTargetGroup.
+    """Resolve audience label from price tier names, falling back to SearchTargetGroup.
 
-    The API sometimes returns a contradictory SearchTargetGroup (e.g. 2 = "Kun
-    medlemmer") while the price tier is named "Gratis - åpent for alle" or
-    similar.  When any available price name contains "åpent for alle" the event
-    is effectively open to everyone, so we return that instead.
+    Price tier names (e.g. "Gratis - åpent for alle", "Gratis og kun for
+    Tekna-medlemmer") are the ground truth shown on the website.  The numeric
+    SearchTargetGroup field sometimes contradicts them, so we prefer the first
+    price name when available.
     """
     prices = event.get("Prices", [])
-    for p in prices:
-        name = (p.get("Name") or "").lower()
-        if "åpent for alle" in name:
-            return "Åpen for alle"
+    if prices:
+        return prices[0].get("Name")
 
     target_group = event.get("SearchTargetGroup")
     if target_group is not None:
