@@ -41,7 +41,10 @@ def format_event_summary(event: dict[str, Any]) -> str:
     organizer = event.get("Organizer", {})
     organizer_name = organizer.get("Name", "") if organizer else ""
 
-    audience_label = AUDIENCE_MAP.get(event.get("SearchTargetGroup"))
+    target_group = event.get("SearchTargetGroup")
+    audience_label = (
+        AUDIENCE_MAP.get(target_group) if target_group is not None else None
+    )
 
     lines = [
         f"[{title}]({url})",
@@ -80,7 +83,10 @@ def format_event_details(event: dict[str, Any]) -> str:
     if sub_organizer and sub_organizer.get("Name"):
         parts.append(f"**Sub-Organizer**: {sub_organizer['Name']}")
 
-    audience_label = AUDIENCE_MAP.get(event.get("SearchTargetGroup"))
+    target_group = event.get("SearchTargetGroup")
+    audience_label = (
+        AUDIENCE_MAP.get(target_group) if target_group is not None else None
+    )
     if audience_label:
         parts.append(f"**Målgruppe**: {audience_label}")
 
