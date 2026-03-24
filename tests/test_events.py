@@ -230,6 +230,48 @@ class TestGetEventDetails:
 
         assert "Sub-Organizer" not in result
 
+    async def test_audience_overridden_by_price_name(self) -> None:
+        """Audience is 'Åpen for alle' when price name contains 'åpent for alle'."""
+        from mcp_tekna.models import format_event_details, format_event_summary
+
+        # SearchTargetGroup says members-only, but price says open for all
+        event = {
+            "Title": "Biobasert webinar",
+            "SearchTargetGroup": 2,
+            "Prices": [
+                {
+                    "Name": "Gratis - åpent for alle",
+                    "Amount": 0,
+                    "IsAvailable": True,
+                }
+            ],
+        }
+        summary = format_event_summary(event)
+        assert "Målgruppe: Åpen for alle" in summary
+        assert "Kun medlemmer" not in summary
+
+        details = format_event_details(event)
+        assert "**Målgruppe**: Åpen for alle" in details
+        assert "Kun medlemmer" not in details
+
+    async def test_audience_overridden_by_price_name_variant(self) -> None:
+        """Also works with 'Gratis og åpent for alle' variant."""
+        from mcp_tekna.models import format_event_summary
+
+        event = {
+            "Title": "Test event",
+            "SearchTargetGroup": 2,
+            "Prices": [
+                {
+                    "Name": "Gratis og Åpent for alle",
+                    "Amount": 0,
+                    "IsAvailable": True,
+                }
+            ],
+        }
+        result = format_event_summary(event)
+        assert "Målgruppe: Åpen for alle" in result
+
     async def test_audience_omitted_when_unknown(self) -> None:
         """Audience label is omitted when SearchTargetGroup is not in map."""
         from mcp_tekna.models import format_event_summary
