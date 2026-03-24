@@ -167,6 +167,77 @@ class TestGetEventDetails:
         assert "500" in result  # Price
         assert "https://www.tekna.no/kurs/51691" in result
 
+    async def test_summary_includes_organizer_and_audience(self) -> None:
+        """Summary output includes Arrangør and Målgruppe lines."""
+        from mcp_tekna.events import search_events
+
+        with patch(
+            "mcp_tekna.events.fetch_events",
+            new_callable=AsyncMock,
+            return_value=EVENTS_FIXTURE,
+        ):
+            result = await search_events()
+
+        # First event: Organizer "Tekna", SearchTargetGroup 0 -> "Åpen for alle"
+        assert "Arrangør: Tekna" in result
+        assert "Målgruppe: Åpen for alle" in result
+        # Second event: Tekna Vestland, group 2 -> "Kun medlemmer"
+        assert "Arrangør: Tekna Vestland" in result
+        assert "Målgruppe: Kun medlemmer" in result
+
+    async def test_details_include_audience_and_sub_organizer(self) -> None:
+        """Details output includes Målgruppe and Sub-Organizer when present."""
+        from mcp_tekna.events import get_event_details
+
+        # Use second event which has SubOrganizer and SearchTargetGroup 2
+        single_response = {
+            "Courses": {
+                "Paging": {"PageNumber": 1, "NumPages": 1, "TotalNumItems": 1},
+                "Items": [EVENTS_FIXTURE["Courses"]["Items"][1]],
+                "Refiners": [],
+            }
+        }
+
+        with patch(
+            "mcp_tekna.events.fetch_events",
+            new_callable=AsyncMock,
+            return_value=single_response,
+        ):
+            result = await get_event_details(event_number="51700")
+
+        assert "**Målgruppe**: Kun medlemmer" in result
+        assert "**Sub-Organizer**: Tekna Bergen" in result
+
+    async def test_details_omit_sub_organizer_when_null(self) -> None:
+        """Details output omits Sub-Organizer when SubOrganizer is null."""
+        from mcp_tekna.events import get_event_details
+
+        # First event has SubOrganizer: null
+        single_response = {
+            "Courses": {
+                "Paging": {"PageNumber": 1, "NumPages": 1, "TotalNumItems": 1},
+                "Items": [EVENTS_FIXTURE["Courses"]["Items"][0]],
+                "Refiners": [],
+            }
+        }
+
+        with patch(
+            "mcp_tekna.events.fetch_events",
+            new_callable=AsyncMock,
+            return_value=single_response,
+        ):
+            result = await get_event_details(event_number="51691")
+
+        assert "Sub-Organizer" not in result
+
+    async def test_audience_omitted_when_unknown(self) -> None:
+        """Audience label is omitted when SearchTargetGroup is not in map."""
+        from mcp_tekna.models import format_event_summary
+
+        event = {"Title": "Test", "SearchTargetGroup": 99}
+        result = format_event_summary(event)
+        assert "Målgruppe" not in result
+
     async def test_event_not_found_returns_error(self) -> None:
         """T016: Event not found returns error."""
         from mcp_tekna.events import get_event_details
